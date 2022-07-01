@@ -13,6 +13,11 @@ contract TokenFarm is Ownable {
     mapping(address => uint256) uniqueTokensStaked;
     address[] public stakers;
     address[] public allowedTokens;
+    IERC20 public dappToken;
+
+    constructor (address dappTokenAddress) public{
+        dappToken = IERC20(dappTokenAddress);
+    }
 
     function setPriceFeedContract (address _tokenAddress, address _priceFeed) public onlyOwner{
         tokenToPrice[_tokenAddress] = _priceFeed;
@@ -62,6 +67,31 @@ contract TokenFarm is Ownable {
         ( , int256 price, , , ) = priceFeed.latestRoundData();
         uint256 decimals = uint256(priceFeed.decimals());
         return (uint256(price), decimals);
+    }
+
+    function getUserSingleTokenValue (address _user, address _token) public view returns (uint256){
+        if (uniqueTokensStaked[_user] <=0){
+            return 0;
+        }
+        (uint256 price, uint256 decimals) = getTokenValue(_token);
+        return (stakingBalance[_token][_user] * price / (10**decimals));
+    }
+
+    function getUserTotalValue (address _user) public view returns (uint256){
+        uint256 totalValue = 0;
+        require(uniqueTokensStaked[_user] > 0, "No tokens staked");
+        for ( uint256 index = 0; index < allowedTokens.length ; index++){
+            totalValue = totalValue + getUserSingleTokenValue(_user, allowedTokens[index]);
+        }
+        return totalValue;
+    }
+
+    function issueTokens () public onlyOwner{
+        for ( uint256 index = 0; index < stakers.length; index++){
+            address recipient = stakers[index];
+            uint256 userTotalValue = getUserTotalValue(recipient);
+            dappToken.transfer(recipient, userTotalValue);
+        }
     }
 }
 
