@@ -55,7 +55,7 @@ def deploy_mocks( decimals=DECIMALS, initial_value=INITIAL_VALUE):
 def verify_status():
     verify = (
         config["networks"][network.show_active()]["verify"]
-        if config["networks"][network.show_active()]["verify"]
+        if config["networks"][network.show_active()].get('verify')
         else False
     )
     return verify
