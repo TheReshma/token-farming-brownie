@@ -41,18 +41,15 @@ def get_contract(contract_name):
             contract = Contract.from_abi( contract_type._name, contract_address, contract_type.abi)
         except KeyError:
             print(f"Theres some error here in getting contracts on {network.show_active()}")
+    return contract
 
 def deploy_mocks( decimals=DECIMALS, initial_value=INITIAL_VALUE):
     print(f"The active network is{network.show_active()}")
     account = get_account()
     link_token = LinkToken.deploy({"from": account})
-    mock_price_feed = MockV3Aggregator.deploy({"from": account})
+    mock_price_feed = MockV3Aggregator.deploy(decimals, initial_value, {"from": account})
     mock_dai = MockDAI.deploy({"from": account})
     mock_weth = MockWETH.deploy({"from": account})
-    print(f"Link deployed on {link_token.address}, V3Aggregator on {mock_price_feed.address}")
-    print(f"DAI on {mock_dai.address}, WETH on {mock_weth.address}")
-
-
 
 
 
