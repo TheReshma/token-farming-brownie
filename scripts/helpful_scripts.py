@@ -2,6 +2,7 @@ from brownie import (
     network,
     accounts,
     config,
+    interface,
     LinkToken,
     MockV3Aggregator,
     MockWETH,
@@ -51,6 +52,25 @@ def deploy_mocks( decimals=DECIMALS, initial_value=INITIAL_VALUE):
     mock_dai = MockDAI.deploy({"from": account})
     mock_weth = MockWETH.deploy({"from": account})
 
+def verify_status():
+    verify = (
+        config["networks"][network.show_active()]["verify"]
+        if config["networks"][network.show_active()]["verify"]
+        else False
+    )
+    return verify
+
+def issue_tokens():
+    account = get_account()
+    token_farm = get_contract("TokenFarm")
+    tx = token_farm.issueTokens({"from": account})
+    tx.wait(1)
+
+def fund_with_link( contract_address, account=None, link_token=None, amount=1000000000000000000 ):
+    account = account if account else get_account()
+    link_token = link_token if link_token else get_contract("link_token")
+    tx = interface.LinkTokenInterface(link_token).transfer( contract_address, amount, {"from": account})
+    return tx
 
 
 
