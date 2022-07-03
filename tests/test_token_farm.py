@@ -1,5 +1,5 @@
 from web3 import Web3
-from scripts.deploy import deploy_farm_token_and_dapp_token, KEPT_BALANCE
+from scripts.deploy import deploy_farm_token_and_dapp_token
 from scripts.helpful_scripts import DECIMALS, LOCAL_BLOCKCHAIN_ENV, get_account, get_contract, INITIAL_VALUE
 from brownie import network, exceptions, MockERC20
 import pytest
