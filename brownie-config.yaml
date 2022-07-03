@@ -6,3 +6,14 @@ compiler:
     remappings:
       - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.1.0'
       - '@chainlink=smartcontractkit/chainlink@1.5.0'
+dotenv: .env
+wallets:
+  from_key: ${PRIVATE_KEY}
+networks:
+  default: 'development'
+  rinkeby:
+    verify: True
+    dai_usd_price_feed: '0x2bA49Aaa16E6afD2a993473cfB70Fa8559B523cF'
+    eth_usd_price_feed: '0x8A753747A1Fa494EC906cE90E9f37563A8AF630e'
+    weth_token: '0x71f3B03149baEda31047E59d0c75e15a6b431202'
+    fau_token: '0x83712EBDA3830726DA8efEc589E32Cf092C4Db78'
