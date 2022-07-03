@@ -71,7 +71,3 @@ def fund_with_link( contract_address, account=None, link_token=None, amount=1000
     link_token = link_token if link_token else get_contract("link_token")
     tx = interface.LinkTokenInterface(link_token).transfer( contract_address, amount, {"from": account})
     return tx
-
-
-
-
